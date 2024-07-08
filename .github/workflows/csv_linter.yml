@@ -26,8 +26,11 @@ jobs:
       run: |
         if ! grep -q "No errors." <(find . -name "*.csv" -exec csvclean -n -u 2 {} + | grep -v "^$"); then
           echo "Errors were found in one or more CSV files."
+          find . -name "*.csv" -exec csvclean -n -u 2 {} + | grep -v "^$"
           exit 1
         fi
+    - name: Automatically fix common CSV errors
+      run: find . -name "*.csv" -exec csvclean -u 2 {} +
     - name: Check Trailing Whitespaces
       run: |
         # Check if the special file contains any trailing whitespaces
